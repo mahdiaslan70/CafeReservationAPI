@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="CafeReservation.Application/CafeReservation.Application.csproj" />
+  <Project Path="CafeReservation.Domain/CafeReservation.Domain.csproj" />
+  <Project Path="CafeReservation.Infrastructure/CafeReservation.Infrastructure.csproj" />
+  <Project Path="CafeReservation.WebAPI/CafeReservation.WebAPI.csproj" />
+</Solution>
