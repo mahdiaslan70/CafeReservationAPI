@@ -1,6 +1,8 @@
+using CafeReservation.Application;
 using CafeReservation.Application.Features.MenuItems.Commands.CreateMenuItem;
 using CafeReservation.Infrastructure;
 using DbUp;
+using FluentValidation;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +21,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddMediatR(cfg=>
-cfg.RegisterServicesFromAssembly(typeof(CreateMenuItemCommand).Assembly));
+cfg.RegisterServicesFromAssembly(typeof(IAssemblyMarker).Assembly));
+
+builder.Services.AddValidatorsFromAssemblyContaining(typeof(IAssemblyMarker));
 
 EnsureDatabase.For.SqlDatabase(connectionString);
 
