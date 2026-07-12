@@ -1,4 +1,5 @@
 using CafeReservation.Application;
+using CafeReservation.Application.Common.Behaviors;
 using CafeReservation.Application.Features.MenuItems.Commands.CreateMenuItem;
 using CafeReservation.Infrastructure;
 using DbUp;
@@ -20,8 +21,12 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddMediatR(cfg=>
-cfg.RegisterServicesFromAssembly(typeof(IAssemblyMarker).Assembly));
+builder.Services.AddMediatR(cfg =>
+{
+
+    cfg.RegisterServicesFromAssembly(typeof(IAssemblyMarker).Assembly);
+    cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+});
 
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(IAssemblyMarker));
 
