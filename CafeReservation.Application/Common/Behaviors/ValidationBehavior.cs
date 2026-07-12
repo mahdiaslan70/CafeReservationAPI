@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using CafeReservation.Application.Features.MenuItems.Commands.UpdateMenuItem;
+using FluentValidation;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,8 @@ namespace CafeReservation.Application.Common.Behaviors
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        private readonly IEnumerable<IValidator> _validators;
-        public ValidationBehavior(IEnumerable<IValidator> validators)
+        private readonly IEnumerable<IValidator<TRequest>> _validators;
+        public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
         {
             _validators = validators;
         }
