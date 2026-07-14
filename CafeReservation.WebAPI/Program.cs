@@ -2,6 +2,7 @@ using CafeReservation.Application;
 using CafeReservation.Application.Common.Behaviors;
 using CafeReservation.Application.Features.MenuItems.Commands.CreateMenuItem;
 using CafeReservation.Infrastructure;
+using CafeReservation.WebAPI.Middleware;
 using DbUp;
 using FluentValidation;
 using System.Reflection;
@@ -54,6 +55,8 @@ else
 }
 
 var app = builder.Build();
+
+app.UseMiddleware(typeof(ExeptionHandlingMiddleware));
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
