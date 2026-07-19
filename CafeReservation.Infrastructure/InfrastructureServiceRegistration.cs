@@ -1,5 +1,4 @@
 ﻿using CafeReservation.Infrastructure.Persistence;
-using CafeReservation.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using CafeReservation.Domain.Repositories;
+using CafeReservation.Infrastructure.Persistence.Repositories;
 
 namespace CafeReservation.Infrastructure
 {
