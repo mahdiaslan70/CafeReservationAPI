@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CafeReservation.Domain\CafeReservation.Domain.csproj" />
-    <ProjectReference Include="..\CafeReservation.Infrastructure\CafeReservation.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
