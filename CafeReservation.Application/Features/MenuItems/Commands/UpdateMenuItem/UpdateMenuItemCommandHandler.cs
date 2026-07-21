@@ -1,5 +1,4 @@
 ﻿using CafeReservation.Application.Features.MenuItems.Queries;
-using CafeReservation.Infrastructure.Persistence;
 using Dapper;
 using MediatR;
 using Microsoft.Data.SqlClient;
