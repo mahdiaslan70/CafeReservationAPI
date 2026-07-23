@@ -20,6 +20,11 @@ namespace CafeReservation.Infrastructure.Persistence.Repositories
             await _context.Users.AddAsync(user, cancellationToken);
         }
 
+        public async Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
         public async Task<bool> IsEmailUniqueAsync(string email, CancellationToken cancellationToken)
         {
             return !await _context.Users.AnyAsync(u => u.Email == email, cancellationToken);
