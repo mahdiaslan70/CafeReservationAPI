@@ -18,6 +18,7 @@ namespace CafeReservation.Infrastructure.Persistence.Repositories
         public async Task AddAsync(User user, CancellationToken cancellationToken)
         {
             await _context.Users.AddAsync(user, cancellationToken);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
