@@ -31,6 +31,7 @@ namespace CafeReservation.WebAPI.Middleware
             catch (Exception ex)
             {
                 _logger.LogWarning(ex, "An unknown error occured !");
+                await HandleGenericExceptionAsync(context, ex);
             }
         }
 
