@@ -12,7 +12,8 @@ namespace CafeReservation.WebAPI
     {
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            var jwtOptions = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
+            var jwtOptions = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()
+                ?? throw new InvalidOperationException("There are no options for jwtOptions in appsettings.json !");
 
             services.AddAuthentication(options =>
             {
@@ -54,6 +55,7 @@ namespace CafeReservation.WebAPI
                     };
 
                     document.Components ??= new OpenApiComponents();
+                    document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
                     document.Components.SecuritySchemes["Bearer"] = securityScheme;
 
                     var schemeReference = new OpenApiSecuritySchemeReference("Bearer", document);
