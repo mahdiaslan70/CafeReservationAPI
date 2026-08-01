@@ -2,9 +2,11 @@ using CafeReservation.Application;
 using CafeReservation.Application.Common.Behaviors;
 using CafeReservation.Application.Features.MenuItems.Commands.CreateMenuItem;
 using CafeReservation.Infrastructure;
+using CafeReservation.WebAPI;
 using CafeReservation.WebAPI.Middleware;
 using DbUp;
 using FluentValidation;
+using Scalar.AspNetCore;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +22,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddOpenApiDocumentation();
 
 builder.Services.AddMediatR(cfg =>
 {
@@ -63,11 +66,12 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "CafeReservation API v1");
-    });
+    app.MapScalarApiReference(configureOptions =>
+
+    configureOptions.WithTheme(ScalarTheme.BluePlanet)
+    
+    );
+
 }
 
 app.UseHttpsRedirection();
