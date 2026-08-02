@@ -12,6 +12,7 @@ namespace CafeReservation.Domain.Entities
         public string LastName { get; private set; }
         public string Email { get; private set; }
         public string PasswordHash { get; private set; }
+        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
         private User()
         {
