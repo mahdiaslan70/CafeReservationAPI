@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Script0001_CreateMenuItemsTable.sql" />
+    <None Remove="SqlScripts\Script0001_CreateMenuItemsTable.sql" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Script0002_CreateUsersTable .sql" />
-    <EmbeddedResource Include="SqlScripts\Script0002_CreateUsersTable .sql" />
+    <EmbeddedResource Include="SqlScripts\Script0001_CreateMenuItemsTable.sql" />
+    <EmbeddedResource Include="SqlScripts\Script0002_CreateUsersTable.sql" />
   </ItemGroup>
 
   <ItemGroup>
