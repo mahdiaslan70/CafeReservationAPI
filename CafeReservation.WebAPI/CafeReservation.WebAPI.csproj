@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Script0002_CreateUsersTable .sql" />
-    <EmbeddedResource Include="Script0001_CreateMenuItemsTable.sql" />
+    <EmbeddedResource Include="SqlScripts\Script0002_CreateUsersTable .sql" />
   </ItemGroup>
 
   <ItemGroup>
