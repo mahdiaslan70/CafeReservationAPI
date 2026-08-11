@@ -10,6 +10,8 @@ using CafeReservation.Infrastructure.Persistence.Repositories;
 using CafeReservation.Application.Common.Interfaces.Authentication;
 using CafeReservation.Infrastructure.Authentication;
 using CafeReservation.Application.Common.Interfaces.Persistence;
+using System.Data;
+using Microsoft.Data.SqlClient;
 
 namespace CafeReservation.Infrastructure
 {
@@ -17,6 +19,9 @@ namespace CafeReservation.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<IDbConnection>(sp => 
+            new SqlConnection(configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
