@@ -49,6 +49,7 @@ namespace CafeReservation.WebAPI
                     {
                         Name = "Authorization",
                         Type = SecuritySchemeType.Http,
+                        Scheme = "Bearer",
                         In = ParameterLocation.Header,
                         BearerFormat = "JWT",
                         Description = "Enter JWT value !"
