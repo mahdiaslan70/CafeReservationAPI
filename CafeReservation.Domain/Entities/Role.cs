@@ -11,4 +11,11 @@ namespace CafeReservation.Domain.Entities
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
     }
+
+    public enum RoleType
+    {
+        User = 1,
+        Admin = 2
+
+    }
 }

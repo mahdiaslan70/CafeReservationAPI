@@ -18,9 +18,9 @@ namespace CafeReservation.Domain.Entities
         {
         }
 
-        public static User Create(String firstName, String lastName, String email, String passwordHash)
+        public static User Create(String firstName, String lastName, String email, String passwordHash, RoleType roleType = RoleType.User)
         {
-            return new User
+            var user = new User
             {
                 Id = Guid.NewGuid(),
                 FirstName = firstName,
@@ -28,6 +28,11 @@ namespace CafeReservation.Domain.Entities
                 Email = email,
                 PasswordHash = passwordHash
             };
+
+            user.UserRoles.Add(new UserRole { RoleId = (int)roleType });
+
+            return user;
+
         }
     }
 }
