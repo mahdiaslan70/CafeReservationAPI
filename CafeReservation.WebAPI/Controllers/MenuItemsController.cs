@@ -3,6 +3,7 @@ using CafeReservation.Application.Features.MenuItems.Commands.DeleteMenuItem;
 using CafeReservation.Application.Features.MenuItems.Commands.UpdateMenuItem;
 using CafeReservation.Application.Features.MenuItems.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -22,6 +23,7 @@ namespace CafeReservation.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateItem([FromBody] CreateMenuItemCommand command)
         {
             var id = _mediator.Send(command);
@@ -50,6 +52,7 @@ namespace CafeReservation.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateItem(int id, [FromBody] UpdateMenuItemRequest request)
         {
             var command = new UpdateMenuItemCommand(id, request.Name, request.Description, request.Price);
@@ -63,6 +66,7 @@ namespace CafeReservation.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteItemById(int id)
         {
             bool successful = await _mediator.Send(new DeleteMenuItemByIdCommand(id));
