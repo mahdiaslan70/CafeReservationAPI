@@ -8,6 +8,9 @@ using System.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
+using CafeReservation.Application.Common.Interfaces.Persistence;
+using CafeReservation.Application;
 
 
 namespace CafeReservation.Infrastructure.Authentication
@@ -21,6 +24,8 @@ namespace CafeReservation.Infrastructure.Authentication
         }
         public async Task<string> Generate(User user)
         {
+
+
             var claims = new Claim[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub,user.Id.ToString()),
@@ -30,6 +35,11 @@ namespace CafeReservation.Infrastructure.Authentication
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
 
             };
+
+            foreach (var role in user.UserRoles)
+            {
+                claims.Append(new Claim(ClaimTypes.Role, role.ToString()));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Secret));
 
