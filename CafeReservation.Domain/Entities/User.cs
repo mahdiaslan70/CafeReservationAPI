@@ -34,5 +34,31 @@ namespace CafeReservation.Domain.Entities
             return user;
 
         }
+
+        public void AddRole(RoleType roleType)
+        {
+            if (!UserRoles.Any(r => r.RoleId == (int)roleType))
+            {
+                UserRoles.Add(new UserRole { RoleId = (int)roleType });
+            }
+
+        }
+
+        public void RemoveRole(RoleType roleType)
+        {
+            if(UserRoles == null) return;
+
+            var roleToRemove = UserRoles.FirstOrDefault(r => r.RoleId == (int)roleType);
+
+            if (roleToRemove != null)
+            {
+                if (UserRoles.Count <= 1)
+                {
+                    throw new InvalidOperationException("System users should have at least 1 role !");
+                }
+
+                UserRoles.Remove(roleToRemove);
+            }
+        }
     }
 }
