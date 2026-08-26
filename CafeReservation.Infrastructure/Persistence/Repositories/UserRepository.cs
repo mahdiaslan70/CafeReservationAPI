@@ -26,31 +26,43 @@ namespace CafeReservation.Infrastructure.Persistence.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<UserInfoDTO>> GetAllUsersWithRolesAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<UserInfoDTO>> GetAllUsersInfoAsync(CancellationToken cancellationToken)
         {
             var sql = @"SELECT
                       u.Id,
                       u.FirstName,
                       u.LastName,
                       u.Email,
-                      r.Name AS RoleName
+                      r.Id,
+                      r.Name 
                       FROM Users u 
                       LEFT JOIN UserRoles ur ON u.Id = ur.UserId 
                       LEFT JOIN Roles r ON ur.RoleId = r.Id";
 
             var command = new CommandDefinition(sql, cancellationToken: cancellationToken);
-            var flatResults = await _dbConnection.QueryAsync<FlatUserRole>(command);
 
-            return flatResults
-                .GroupBy(x => new { x.Id, x.FirstName, x.LastName, x.Email })
-                .Select(g => new UserInfoDTO(
-                    g.Key.Id.ToString(),
-                    g.Key.FirstName,
-                    g.Key.LastName,
-                    g.Key.Email,
-                    g.Select(r => r.RoleName).ToList()));
+            var usersDictionary = new Dictionary<Guid, UserInfoDTO>();
 
+            await _dbConnection.QueryAsync<UserInfoDTO, Role, UserInfoDTO>(
+               command,
+               (user, role) =>
+               {
+                   if (!usersDictionary.TryGetValue(user.Id, out var currentUser))
+                   {
+                       currentUser = user;
+                       usersDictionary.Add(currentUser.Id, currentUser);
+                   }
 
+                   if (role != null && !string.IsNullOrWhiteSpace(role.Name))
+                   {
+                       currentUser.Roles.Add(role.Name);
+                   }
+
+                   return currentUser;
+               },
+               splitOn: "Id"
+               );
+            return usersDictionary.Values;
 
         }
 
@@ -61,25 +73,37 @@ namespace CafeReservation.Infrastructure.Persistence.Repositories
                             u.FirstName,
                             u.LastName,
                             u.Email,
-                            r.Name AS RoleName
+                            r.Name 
                             FROM Users u 
                             LEFT JOIN UserRoles ur ON u.Id = ur.UserId
                             LEFT JOIN Roles r ON r.Id = ur.RoleId
                             WHERE u.Email = @Email";
 
+
+
             var command = new CommandDefinition(sql, new { Email = email });
 
-            var flatResult = await _dbConnection.QueryAsync<FlatUserRole>(command);
+            var usersDictionary = new Dictionary<Guid, UserInfoDTO>();
 
-            return flatResult.GroupBy(x => new { x.Id, x.FirstName, x.LastName, x.Email })
-                .Select(g =>
-                new UserInfoDTO(
-                    g.Key.Id.ToString(),
-                    g.Key.FirstName,
-                    g.Key.LastName,
-                    g.Key.Email,
-                    g.Select(x => x.RoleName).ToList())).FirstOrDefault();
+            var userInfo = await _dbConnection.QueryAsync<UserInfoDTO, Role, UserInfoDTO>(
+                command,
+                (user, role) =>
+                {
+                    if (!usersDictionary.TryGetValue(user.Id, out var currentUser))
+                    {
+                        currentUser = user;
+                        usersDictionary.Add(currentUser.Id, currentUser);
+                    }
 
+                    if (role != null && !string.IsNullOrWhiteSpace(role.Name))
+                    {
+                        currentUser.Roles.Add(role.Name);
+                    }
+
+                    return currentUser;
+                });
+
+            return usersDictionary.Values.FirstOrDefault();
         }
 
         public async Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
@@ -90,7 +114,7 @@ namespace CafeReservation.Infrastructure.Persistence.Repositories
                 .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
         }
 
-        
+
 
         public async Task<bool> IsEmailUniqueAsync(string email, CancellationToken cancellationToken)
         {
@@ -99,20 +123,7 @@ namespace CafeReservation.Infrastructure.Persistence.Repositories
 
         }
 
-        //public async Task<IEnumerable<string>> GetUserRolesAsync(string email, CancellationToken cancellationToken)
-        //{
-        //    string sql = @"SELECT r.Name
-        //                FROM Roles r
-        //                INNER JOIN UserRoles ur
-        //                ON ur.RoleId = r.Id
-        //                INNER JOIN Users u ON ur.UserId = u.Id
-        //                WHERE u.Email = @Email";
-        //    var command = new CommandDefinition(sql, new { Email = email }, cancellationToken: cancellationToken);
 
-        //    return await _dbConnection.QueryAsync<string>(command);
-
-
-        //}
 
         public async Task SaveChangesAsync(CancellationToken cancellationToken)
         {

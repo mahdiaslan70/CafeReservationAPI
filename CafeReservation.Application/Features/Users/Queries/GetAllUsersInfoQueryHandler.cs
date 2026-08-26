@@ -19,7 +19,7 @@ namespace CafeReservation.Application.Features.Users.Queries
         }
         public async Task<IEnumerable<UserInfoDTO>> Handle(GetAllUsersInfoQuery query, CancellationToken cancellationToken)
         {
-            return await _userRepository.GetAllUsersWithRolesAsync(cancellationToken);
+            return await _userRepository.GetAllUsersInfoAsync(cancellationToken);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace CafeReservation.Application.Common.Interfaces.Persistence
     {
         Task<bool> IsEmailUniqueAsync(string email, CancellationToken cancellationToken);
         Task AddAsync(User user, CancellationToken cancellationToken);
-        Task<IEnumerable<UserInfoDTO>> GetAllUsersWithRolesAsync(CancellationToken cancellationToken);
+        Task<IEnumerable<UserInfoDTO>> GetAllUsersInfoAsync(CancellationToken cancellationToken);
         Task<UserInfoDTO?> GetUserInfoByEmailAsync(string email, CancellationToken cancellationToken);
         Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken);
         //Task<IEnumerable<string>> GetUserRolesAsync(string email, CancellationToken cancellationToken);
