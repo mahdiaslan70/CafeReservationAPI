@@ -5,10 +5,13 @@ using System.Text;
 
 namespace CafeReservation.Application.Features.Users.Queries
 {
-    public record UserInfoDTO(
-        string Id,
-        string FirstName,
-        string LastName,
-        string Email,
-        List<string> Roles);
+    public class UserInfoDTO
+    {
+        public Guid Id { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public List<string> Roles { get; set; } = new List<string>();
+    }
+
 }
