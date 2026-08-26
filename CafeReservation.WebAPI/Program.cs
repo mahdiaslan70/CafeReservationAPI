@@ -1,6 +1,5 @@
 using CafeReservation.Application;
 using CafeReservation.Application.Common.Behaviors;
-using CafeReservation.Application.Features.MenuItems.Commands.CreateMenuItem;
 using CafeReservation.Infrastructure;
 using CafeReservation.WebAPI;
 using CafeReservation.WebAPI.Middleware;
@@ -16,6 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
+
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -69,12 +70,14 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference(configureOptions =>
 
     configureOptions.WithTheme(ScalarTheme.BluePlanet)
-    
+
     );
 
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
