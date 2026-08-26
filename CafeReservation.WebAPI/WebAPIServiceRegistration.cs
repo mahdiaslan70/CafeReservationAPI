@@ -59,6 +59,7 @@ namespace CafeReservation.WebAPI
                     document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
                     document.Components.SecuritySchemes["Bearer"] = securityScheme;
 
+
                     var schemeReference = new OpenApiSecuritySchemeReference("Bearer", document);
 
                     var securityRequirement = new OpenApiSecurityRequirement

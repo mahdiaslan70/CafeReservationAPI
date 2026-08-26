@@ -2,11 +2,13 @@
 using CafeReservation.Application.Features.Users.Commands.Roles;
 using CafeReservation.Application.Features.Users.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CafeReservation.WebAPI.Controllers
 {
+    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -50,6 +52,6 @@ namespace CafeReservation.WebAPI.Controllers
             return Ok(new { Message = "Role was removed from user successfully !" });
         }
 
-     
+
     }
 }

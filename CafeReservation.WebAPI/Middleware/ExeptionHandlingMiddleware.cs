@@ -66,7 +66,7 @@ namespace CafeReservation.WebAPI.Middleware
 
             var response = new
             {
-                Title = "Some eeroes occured in server !",
+                Title = "Some errors occured in server !",
                 Status = (int)HttpStatusCode.InternalServerError,
                 Errors = ex.Message
             };
