@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CafeReservation.Domain;
-using CafeReservation.Domain.Entities;
+﻿using CafeReservation.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 namespace CafeReservation.Infrastructure.Persistence
 {
@@ -14,7 +10,7 @@ namespace CafeReservation.Infrastructure.Persistence
 
         }
 
-        public DbSet<MenuItem> MenuItems { get; set; }
+        public DbSet<MenuItem> MenuItems { get; set; } 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
