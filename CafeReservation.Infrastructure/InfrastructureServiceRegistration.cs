@@ -19,18 +19,16 @@ namespace CafeReservation.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IDbConnection>(sp => 
+            services.AddTransient<IDbConnection>(sp =>
             new SqlConnection(configuration.GetConnectionString("DefaultConnection")));
-
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
             services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
-
             services.AddScoped<IMenuItemRepository, MenuItemRepository>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddSingleton<IJwtProvider, JwtProvider>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             return services;
         }
