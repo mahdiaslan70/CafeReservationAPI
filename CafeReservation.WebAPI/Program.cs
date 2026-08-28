@@ -15,24 +15,18 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
-
 builder.Services.AddJwtAuthentication(builder.Configuration);
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddOpenApiDocumentation();
-
 builder.Services.AddMediatR(cfg =>
 {
 
     cfg.RegisterServicesFromAssembly(typeof(IAssemblyMarker).Assembly);
     cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
-
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(IAssemblyMarker));
 
 EnsureDatabase.For.SqlDatabase(connectionString);
@@ -41,16 +35,13 @@ var upgrader = DeployChanges.To.SqlDatabase(connectionString)
     .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
     .LogToConsole()
     .Build();
-
 var result = upgrader.PerformUpgrade();
-
 if (!result.Successful)
 {
     Console.ForegroundColor = ConsoleColor.Red;
     Console.WriteLine($"An error occured while creating Database : {result.Error}");
     Console.ResetColor();
 }
-
 else
 {
     Console.ForegroundColor = ConsoleColor.Green;
@@ -61,26 +52,18 @@ else
 var app = builder.Build();
 
 app.UseMiddleware(typeof(ExeptionHandlingMiddleware));
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-
     app.MapScalarApiReference(configureOptions =>
-
     configureOptions.WithTheme(ScalarTheme.BluePlanet)
 
     );
 
 }
-
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
