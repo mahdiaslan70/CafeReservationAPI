@@ -26,7 +26,7 @@ namespace CafeReservation.Infrastructure.Authentication
         {
 
 
-            var claims = new Claim[]
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub,user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email,user.Email),
@@ -36,9 +36,9 @@ namespace CafeReservation.Infrastructure.Authentication
 
             };
 
-            foreach (var role in user.UserRoles)
+            foreach (var userRole in user.UserRoles)
             {
-                claims.Append(new Claim(ClaimTypes.Role, role.ToString()));
+                claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
             }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Secret));
