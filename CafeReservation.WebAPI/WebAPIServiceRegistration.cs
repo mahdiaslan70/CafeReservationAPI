@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Security.Claims;
 
 namespace CafeReservation.WebAPI
 {
@@ -24,6 +25,7 @@ namespace CafeReservation.WebAPI
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
+                        RoleClaimType = ClaimTypes.Role,
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateLifetime = true,
@@ -71,6 +73,8 @@ namespace CafeReservation.WebAPI
                     document.Security.Add(securityRequirement);
 
                     return Task.CompletedTask;
+
+                    
                 }));
 
             return services;
