@@ -20,10 +20,10 @@ namespace CafeReservation.WebAPI.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AllUsersInfo(GetAllUsersInfoQuery query, CancellationToken cancellationToken)
+        [HttpGet]
+        public async Task<IActionResult> AllUsersInfo(CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(new GetAllUsersInfoQuery());
 
             return Ok(result);
         }
