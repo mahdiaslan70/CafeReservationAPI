@@ -22,23 +22,29 @@ namespace CafeReservation.Infrastructure.Authentication
         {
             _jwtOptions = jwtOptions.Value;
         }
-        public async Task<string> Generate(User user)
+        public async Task<string> Generate(User? user = null)
         {
+            var claims = new List<Claim>();
 
-
-            var claims = new List<Claim>
+            if (user == null)
             {
-                new Claim(JwtRegisteredClaimNames.Sub,user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email,user.Email),
-                new Claim(JwtRegisteredClaimNames.GivenName,user.FirstName),
-                new Claim(JwtRegisteredClaimNames.FamilyName,user.LastName),
-                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()));
+            }
 
-            };
-
-            foreach (var userRole in user.UserRoles)
+            else
             {
-                claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
+
+                claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()));
+                claims.Add(new Claim(JwtRegisteredClaimNames.Email, user.Email));
+                claims.Add(new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName));
+                claims.Add(new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName));
+                claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+
+
+                foreach (var userRole in user.UserRoles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
+                }
             }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Secret));
@@ -56,6 +62,7 @@ namespace CafeReservation.Infrastructure.Authentication
             string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
 
             return tokenValue;
+
         }
     }
 }
