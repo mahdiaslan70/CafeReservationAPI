@@ -8,6 +8,7 @@ using CafeReservation.Domain.Repositories;
 using CafeReservation.Infrastructure.Persistence;
 using Dapper;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace CafeReservation.Infrastructure.Persistence.Repositories
@@ -26,6 +27,10 @@ namespace CafeReservation.Infrastructure.Persistence.Repositories
 
         }
 
+        public async Task<bool> Exists(int menuItemId)
+        {
+            return await _context.MenuItems.AnyAsync(i => i.Id == menuItemId);
+        }
         public async Task<int> AddAsync(MenuItem menuItem)
         {
             await _context.MenuItems.AddAsync(menuItem);
@@ -33,6 +38,8 @@ namespace CafeReservation.Infrastructure.Persistence.Repositories
 
             return menuItem.Id;
         }
+
+
 
         public async Task<IEnumerable<MenuItem>> GetAllAsync()
         {
@@ -42,5 +49,9 @@ namespace CafeReservation.Infrastructure.Persistence.Repositories
             return await connection.QueryAsync<MenuItem>(sql);
         }
 
+        public async Task<MenuItem?> GetItemAsync(int menuItemId)
+        {
+            return await _context.MenuItems.FirstOrDefaultAsync(i => i.Id == menuItemId);
+        }
     }
 }
