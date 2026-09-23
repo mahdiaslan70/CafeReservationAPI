@@ -12,6 +12,7 @@ using CafeReservation.Infrastructure.Authentication;
 using CafeReservation.Application.Common.Interfaces.Persistence;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using CafeReservation.Application.Common.Interfaces.ShoppingCart;
 
 namespace CafeReservation.Infrastructure
 {
@@ -29,6 +30,7 @@ namespace CafeReservation.Infrastructure
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddSingleton<IJwtProvider, JwtProvider>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<IShoppingCartRepository,ShoppingCartRepository>();
 
             return services;
         }

@@ -36,6 +36,7 @@ namespace CafeReservation.Infrastructure.Authentication
             }
         }
 
+       // public Guid? ShoppingCartId => User?.FindFirst(ClaimTypes.)
         public bool IsInRole(string roleName) =>
             User?.IsInRole(roleName) ?? false;
     }

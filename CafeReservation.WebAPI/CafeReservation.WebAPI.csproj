@@ -11,6 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="SqlScripts\Script0006_CreateShoppingCartItemsTable.sql" />
+    <EmbeddedResource Include="SqlScripts\Script0005_CreateShoppingCartsTable.sql" />
     <EmbeddedResource Include="SqlScripts\Script0004_CreateUserRolesTable.sql" />
     <EmbeddedResource Include="SqlScripts\Script0003_CreateRolesTable.sql" />
     <EmbeddedResource Include="SqlScripts\Script0001_CreateMenuItemsTable.sql" />
