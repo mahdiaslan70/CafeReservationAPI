@@ -52,5 +52,10 @@ namespace CafeReservation.Infrastructure.Persistence.Repositories
             }
 
         }
+
+        public async Task SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            var idk = await _context.SaveChangesAsync(cancellationToken);
+        }
     }
 }
