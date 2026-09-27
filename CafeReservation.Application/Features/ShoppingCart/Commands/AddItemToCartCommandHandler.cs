@@ -24,9 +24,13 @@ namespace CafeReservation.Application.Features.ShoppingCart.Commands
         }
         public async Task<bool> Handle(AddItemToCartCommand command, CancellationToken cancellationToken)
         {
-            var cart = await _shoppingCartRepository.GetCartAsync(command.UserId, command.GuestId, cancellationToken)
-                ?? Domain.Entities.ShoppingCart.Create(command.UserId, command.GuestId);
+            var cart = await _shoppingCartRepository.GetCartAsync(command.UserId, command.GuestId, cancellationToken);
 
+            if (cart == null)
+            {
+                cart = Domain.Entities.ShoppingCart.Create(command.UserId, command.GuestId);
+                await _shoppingCartRepository.AddAsync(cart, cancellationToken);
+            }
 
             var item = await _menuItemRepository.GetItemAsync(command.MenuItemId);
 
@@ -36,6 +40,8 @@ namespace CafeReservation.Application.Features.ShoppingCart.Commands
             }
 
             cart.AddToCart(command.MenuItemId, item.Name, item.Price, command.Quantity);
+
+            await _shoppingCartRepository.SaveChangesAsync(cancellationToken);
 
             return true;
 
