@@ -13,22 +13,22 @@ namespace CafeReservation.Application.Features.ShoppingCart.Queries
     public class GetCartQueryHandler : IRequestHandler<GetCartQuery, ShoppingCartDTO>
     {
 
-        private readonly ICartQueryService _queryService;
+        private readonly ICartQueryService _cartQueryService;
 
-        public GetCartQueryHandler(ICartQueryService queryService)
+        public GetCartQueryHandler(ICartQueryService cartQueryService)
         {
-            _queryService = queryService;
+            _cartQueryService = cartQueryService;
         }
         public async Task<ShoppingCartDTO> Handle(GetCartQuery query, CancellationToken cancellationToken)
         {
-            var user = await _queryService.GetCartAsync(query.UserId, query.GuestId);
+            var cart = await _cartQueryService.GetCartAsync(query.UserId, query.GuestId);
 
-            if (user == null)
+            if (cart == null)
             {
-                throw new KeyNotFoundException("User not found !");
+                throw new KeyNotFoundException("Cart was not found!");
             }
 
-            return user;
+            return cart;
         }
 
     }
