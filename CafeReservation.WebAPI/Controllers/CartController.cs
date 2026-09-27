@@ -20,9 +20,34 @@ namespace CafeReservation.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(GetCartQuery request)
+        public async Task<IActionResult> Index()
         {
-            var cart = await _mediator.Send(request);
+            Guid? userId = null;
+            Guid? guestId = null;
+
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (Guid.TryParse(userIdStr, out var parsedUserId))
+                {
+                    userId = parsedUserId;
+                }
+            }
+
+            else
+            {
+                if (Request.Headers.TryGetValue("GuestId", out var guestIdStr))
+                {
+                    if (Guid.TryParse(guestIdStr, out var parsedGuestId))
+                    {
+                        guestId = parsedGuestId;
+                    }
+                }
+            }
+
+            var query = new GetCartQuery(userId, guestId);
+
+            var cart = await _mediator.Send(query);
 
             return Ok(cart);
         }
@@ -42,7 +67,7 @@ namespace CafeReservation.WebAPI.Controllers
                 }
             }
 
-            else if (Request.Headers.TryGetValue("X", out var headerGuestId))
+            else if (Request.Headers.TryGetValue("GuestId", out var headerGuestId))
             {
                 if (Guid.TryParse(headerGuestId, out var parsedGuestId))
                 {
@@ -56,9 +81,9 @@ namespace CafeReservation.WebAPI.Controllers
             }
 
             var command = new AddItemToCartCommand(userId, guestId, request.MenuItemId, request.Quantity);
-            await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            return Ok();
+            return Ok(result);
         }
     }
 }
