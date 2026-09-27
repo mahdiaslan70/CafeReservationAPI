@@ -34,12 +34,11 @@ namespace CafeReservation.Application.Features.ShoppingCart.Queries
                         LEFT JOIN ShoppingCartItems sci ON sc.Id = sci.CartId
                         WHERE (sc.UserId = @UserId OR sc.GuestId = @GuestId)";
 
-            var command = new CommandDefinition(sql, new { UserId = userId, GuestId = guestId });
 
             var cartDictionary = new Dictionary<Guid, ShoppingCartDTO>();
 
             await _dbConnection.QueryAsync<ShoppingCartDTO, ShoppingCartItemDTO, ShoppingCartDTO>(
-                command,
+                sql,
                 (cart, item) =>
                 {
                     if (!cartDictionary.TryGetValue(cart.Id, out var currentCart))
@@ -55,7 +54,7 @@ namespace CafeReservation.Application.Features.ShoppingCart.Queries
 
                     return currentCart;
 
-                },
+                }, param: new { UserId = userId, GuestId = guestId },
                 splitOn: "Id");
 
             return cartDictionary.Values.FirstOrDefault();
